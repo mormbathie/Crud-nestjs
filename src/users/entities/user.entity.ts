@@ -3,19 +3,19 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 @Entity('user')
 export class User {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
     @Column()
-    firstName: string;
+    firstName!: string;
     @Column()
-    lastName: string;
+    lastName!: string;
     @Column()
-    email: string;
+    email!: string;
     @Column({unique: true})
-    username: string;
+    username!: string;
     @Column()
-    password: string;
+    password!: string;
     @Column()
-    isActive: boolean;
+    isActive!: boolean;
     @OneToMany(() => Transaction, (transaction) => transaction.user)
-    transactions: Transaction[];
+    transactions!: Transaction[];
 }
