@@ -25,6 +25,12 @@ export class AuthService {
         return await compare(password, hashPassword);
     }
 
+     async getProfile(username: string){
+        const user = await this.userService.getUser(username)
+        if(!user) throw new NotFoundException("user not found");
+        return {username: user.username, email: user.email, firstName: user.firstName, lastName: user.lastName};
+     }
+
 
     private async Authentification({id}: {id: number}){
 
