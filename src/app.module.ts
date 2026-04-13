@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 
 @Module({
@@ -15,15 +16,21 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     BookingModule,
     TransactionsModule,
-    TypeOrmModule.forRoot({
+     ConfigModule.forRoot({
+      isGlobal: true, // 👈 important
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'nestuser',
-      password: '1234',
-      database: 'crud',
+      host: config.get<string>('DB_HOST'),
+      port: config.get<number>('DB_PORT'),
+      username: config.get<string>('DB_USERNAME'),
+      password: config.get<string>('DB_PASSWORD'),
+      database: config.get<string>('DB_NAME'),
       synchronize: true,
       autoLoadEntities: true
+      })
     }),
     AuthModule,
 
