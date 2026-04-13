@@ -14,7 +14,7 @@ export class UsersService {
   ) { }
   async create(createUserDto: CreateUserDto) {
     const userHashPassword = await this.hashPassword(createUserDto.password)
-    const User = await this.userRepository.create({...createUserDto, password: userHashPassword});
+    const User = await this.userRepository.create({ ...createUserDto, password: userHashPassword });
     const saved = await this.userRepository.save(User);
     return saved;
   }
@@ -36,8 +36,10 @@ export class UsersService {
     return this.userRepository.findOneBy({ id });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update({ id }, updateUserDto);
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const userHashPassword = await this.hashPassword({...updateUserDto}.password!);
+
+    return this.userRepository.update({ id }, { ...updateUserDto, password: userHashPassword });
   }
 
   remove(id: number) {
@@ -45,8 +47,8 @@ export class UsersService {
   }
 
 
-  private async  hashPassword(password: string){
-    const hashPassword = await hash(password,9);
+  private async hashPassword(password: string) {
+    const hashPassword = await hash(password, 9);
     return hashPassword;
   }
 }
