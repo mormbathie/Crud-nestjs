@@ -13,7 +13,7 @@ export class AuthService {
         if (!existingUser) throw new NotFoundException("username or password is incorrect");
         const isPasswordValid = await this.validatePassword(password, existingUser.password);
         if (!isPasswordValid) throw new NotFoundException("username or password is incorrect");
-        return { id: existingUser.id, username: existingUser.username };
+        return {existingUser, message: "login successful"};
 
     }
 
